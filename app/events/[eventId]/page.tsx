@@ -2,6 +2,7 @@
 import CalendarDayEvent from "@/components/events/calendar/CalendarDayEvent";
 import CalendarEventPopup from "@/components/events/calendar/CalendarEventPopup";
 import { generateCalendar } from "@/lib/time";
+import { IDay, IEvent } from "@/types";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -21,7 +22,7 @@ export default function EventsCalendar() {
   const eventId = params.eventId;
 
   const [open, setOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>();
+  const [selectedDay, setSelectedDay] = useState<IDay | null>();
   const [currentDate, setCurrentDate] = useState({
     month: new Date().getMonth(),
     year: new Date().getFullYear(),
@@ -53,9 +54,9 @@ export default function EventsCalendar() {
   const closeModal = () => {
     setOpen(false);
   };
-  const openModal = (date: Date | null) => () => {
+  const openModal = (day: IDay | null) => () => {
     setOpen(true);
-    setSelectedDate(date);
+    setSelectedDay(day);
   };
 
   const renderCalendar = (month: number, year: number) => {
@@ -67,7 +68,7 @@ export default function EventsCalendar() {
         <CalendarDayEvent
           key={i}
           date={day.date}
-          onClick={openModal(day.date)}
+          onClick={openModal(day)}
           isSameMonth={day.currentMonth}
           isToday={day.date.toDateString() === new Date().toDateString()}
           events={day.events}
@@ -78,7 +79,13 @@ export default function EventsCalendar() {
 
   return (
     <div className="flex-[3] border p-4 space-y-4">
-      <CalendarEventPopup open={open} date={new Date()} onClose={closeModal} />
+      {selectedDay && (
+        <CalendarEventPopup
+          open={open}
+          day={selectedDay}
+          onClose={closeModal}
+        />
+      )}
       <div className="flex justify-between items-center">
         <div>{eventId}</div>
         <h1>
@@ -122,40 +129,40 @@ export default function EventsCalendar() {
   );
 }
 
-export interface IEvent {
-  id: string;
-  title: string;
-  date: Date;
-  description: string;
-  color: string;
-}
 const eventsData: IEvent[] = [
   {
     id: "2",
     title: "Conférence DevOps",
-    date: new Date(2025, 1, 19, 14, 0),
+    date: new Date(2025, 1, 19, 17, 0),
     description: "Discussion sur les bonnes pratiques DevOps.",
     color: "blue",
   },
   {
     id: "3",
     title: "Hackathon",
-    date: new Date(2025, 1, 15, 9, 0),
+    date: new Date(2026, 6, 4, 9, 0),
     description: "Compétition de programmation sur 3 jours.",
     color: "red",
   },
   {
     id: "6",
     title: "Hackathon IA",
-    date: new Date(2025, 1, 20, 8, 0),
+    date: new Date(2024, 1, 20, 8, 0),
     description: "Un hackathon dédié à l'intelligence artificielle.",
     color: "green",
   },
   {
     id: "7",
     title: "Sprint Dev Web",
-    date: new Date(2025, 1, 25, 9, 30),
+    date: new Date(2025, 0, 25, 9, 30),
     description: "Sprint intensif pour développer une application web.",
+    color: "orange",
+  },
+  {
+    id: "8",
+    title: "Aller au lac hilya",
+    date: new Date(2025, 0, 25, 10, 30),
+    description: "Sortie au lac hilya.",
     color: "orange",
   },
 ];

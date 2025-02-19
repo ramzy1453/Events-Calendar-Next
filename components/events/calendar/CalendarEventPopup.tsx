@@ -5,27 +5,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-
+import { IDay } from "@/types";
+import moment from "moment";
 type Props = {
-  date: Date;
+  day: IDay;
   open: boolean;
   onClose: () => void;
 };
-const events = [
-  {
-    id: "1",
-    title: "Event 1",
-    date: new Date(),
-    description: "Description 1",
-  },
-  {
-    id: "2",
-    title: "Event 2",
-    date: new Date(),
-    description: "Description 2",
-  },
-];
-export default function CalendarEventPopup({ open, date, onClose }: Props) {
+
+export default function CalendarEventPopup({ open, day, onClose }: Props) {
+  console.log({ day });
+  const { events, date } = day;
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
@@ -37,9 +27,15 @@ export default function CalendarEventPopup({ open, date, onClose }: Props) {
             <p>Aucun événement pour cette date.</p>
           ) : (
             events.map((event) => (
-              <div key={event.id} className="mb-4 p-2rounded">
+              <div
+                key={event.id}
+                className="mb-4 p-2 rounded shadow border cursor-pointer hover:bg-black/75"
+              >
                 <h3 className="font-bold">{event.title}</h3>
                 <p className="text-sm text-gray-600">{event.description}</p>
+                <p className="text-sm text-gray-600">
+                  {moment(event.date).format("HH:mm")}
+                </p>
               </div>
             ))
           )}

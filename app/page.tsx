@@ -1,7 +1,10 @@
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
+import prisma from "@/lib/prisma";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const val = await prisma.user.findMany({ take: 10 });
+  console.log({ val });
   const words = [
     {
       text: "Create",

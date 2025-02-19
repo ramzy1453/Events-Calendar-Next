@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 
 import "./globals.css";
+import ReactQueryProvider from "@/lib/providers/react-query";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,7 +19,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main className="container mx-auto px-8 py-8 dark">{children}</main>
+          <Toaster />
+          <ReactQueryProvider>
+            <main className="container mx-auto px-8 py-8 dark">{children}</main>
+          </ReactQueryProvider>
         </ThemeProvider>
       </body>
     </html>

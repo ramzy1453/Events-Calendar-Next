@@ -1,7 +1,7 @@
 "use client";
 import CalendarDayEvent from "@/components/events/calendar/CalendarDayEvent";
 import CalendarEventPopup from "@/components/events/calendar/CalendarEventPopup";
-import { generateCalendar } from "@/lib/time";
+import { generateCalendar } from "@/utils/calendar";
 import { IDay, IEvent } from "@/types";
 import moment from "moment";
 import { useParams } from "next/navigation";
@@ -61,7 +61,6 @@ export default function EventsCalendar() {
 
   const renderCalendar = (month: number, year: number) => {
     const calendar = generateCalendar(month, year, eventsData);
-    console.log({ calendar });
 
     return calendar.map((day, i) => {
       return (

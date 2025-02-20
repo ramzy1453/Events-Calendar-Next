@@ -23,9 +23,7 @@ export default function RootLayout({
           <Toaster />
           <ReactQueryProvider>
             <AuthProvider>
-              <main className="container mx-auto px-8 py-8 dark">
-                {children}
-              </main>
+              <main className="dark">{children}</main>
             </AuthProvider>
           </ReactQueryProvider>
         </ThemeProvider>

@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import UserApi from "../api/user";
 
 export function useRegisterMutation() {
@@ -15,10 +15,10 @@ export function useLoginMutation() {
   });
 }
 
-export function useVerifyMutation() {
-  return useMutation({
-    mutationKey: ["verify"],
-    mutationFn: UserApi.verify,
+export function useVerifyQuery() {
+  return useQuery({
+    queryKey: ["verify"],
+    queryFn: UserApi.verify,
   });
 }
 

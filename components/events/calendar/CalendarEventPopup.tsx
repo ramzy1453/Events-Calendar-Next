@@ -14,7 +14,6 @@ type Props = {
 };
 
 export default function CalendarEventPopup({ open, day, onClose }: Props) {
-  console.log({ day });
   const { events, date } = day;
   return (
     <Dialog open={open} onOpenChange={onClose}>

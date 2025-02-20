@@ -1,5 +1,5 @@
 import { HTTPResponse } from "@/types/response.d";
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 if (!baseURL) {
@@ -16,22 +16,10 @@ type HTTPRequestConfig = AxiosRequestConfig;
 const api = (axios: AxiosInstance) => {
   return {
     get: <T>(url: string, config: HTTPRequestConfig = {}) => {
-      try {
-        return axios.get<HTTPResponse<T>>(url, config);
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          return error.response?.data;
-        }
-      }
+      return axios.get<HTTPResponse<T>>(url, config);
     },
     delete: <T>(url: string, config: HTTPRequestConfig = {}) => {
-      try {
-        return axios.delete<HTTPResponse<T>>(url, config);
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          return error.response?.data;
-        }
-      }
+      return axios.delete<HTTPResponse<T>>(url, config);
     },
     put: <T, P>(url: string, body: P, config: HTTPRequestConfig = {}) => {
       return axios.put<HTTPResponse<T>>(url, body, config);

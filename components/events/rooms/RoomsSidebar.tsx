@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -6,11 +5,10 @@ import { useOutsideClick } from "@/hooks/useOutsideClick";
 import RoomItem from "./RoomItem";
 import { IRoom } from "@/types/room";
 
-type Props = {
-  rooms: IRoom[];
-};
+type Props = { rooms: IRoom[] };
 export default function RoomsSidebar({ rooms }: Props) {
   const [active, setActive] = useState<IRoom | boolean | null>(null);
+
   const ref = useRef<HTMLDivElement>(null);
   const id = useId();
 
@@ -27,8 +25,14 @@ export default function RoomsSidebar({ rooms }: Props) {
       document.body.style.overflow = "auto";
     }
 
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    if (typeof window !== "undefined") {
+      window.addEventListener("keydown", onKeyDown);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("keydown", onKeyDown);
+      }
+    };
   }, [active]);
 
   useOutsideClick(ref, () => setActive(null));
@@ -78,7 +82,7 @@ export default function RoomsSidebar({ rooms }: Props) {
                   priority
                   width={200}
                   height={200}
-                  src={"https://assets.aceternity.com/demos/lana-del-rey.jpeg"}
+                  src={"https://assets.aceternity.com/demos/babbu-maan.jpeg"}
                   alt={active.name}
                   className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
                 />
@@ -107,7 +111,7 @@ export default function RoomsSidebar({ rooms }: Props) {
                     target="_blank"
                     className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white"
                   >
-                    {"Join"}
+                    Join
                   </motion.a>
                 </div>
               </div>
@@ -116,16 +120,15 @@ export default function RoomsSidebar({ rooms }: Props) {
         ) : null}
       </AnimatePresence>
       <ul className="max-w-2xl mx-auto w-full gap-4">
-        {rooms.map((room, i) => (
+        {rooms.map((card, i) => (
           <RoomItem
             key={i}
-            id={room._id}
-            title={room.name}
-            src={"https://assets.aceternity.com/demos/lana-del-rey.jpeg"}
-            ctaText={"Play"}
-            description={"room.description"}
+            id={id}
+            title={card.name}
+            src={"https://assets.aceternity.com/demos/babbu-maan.jpeg"}
+            description={card.description}
             setActive={() => {
-              setActive(room);
+              setActive(card);
             }}
           />
         ))}

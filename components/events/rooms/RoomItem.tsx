@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -7,7 +8,6 @@ type Props = {
   id: string;
   src: string;
   description: string;
-  ctaText: string;
   setActive: () => void;
 };
 

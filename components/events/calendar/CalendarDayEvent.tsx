@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import React from "react";
-import { IEvent } from "@/types";
 import moment from "moment";
+import { IEvent } from "@/types/event";
 
 type Props = {
   onClick: () => void;

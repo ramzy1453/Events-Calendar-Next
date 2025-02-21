@@ -1,4 +1,4 @@
-import { IEvent } from "@/types";
+import { IEvent } from "@/types/event";
 
 export const generateCalendar = (
   month: number,
@@ -26,7 +26,7 @@ export const generateCalendar = (
   ) {
     const date = new Date(prevYear, prevMonth, i);
     const events = eventsData.filter(
-      (e) => e.date.toDateString() === date.toDateString()
+      (e) => new Date(e.date).toDateString() === date.toDateString()
     );
 
     days.push({
@@ -38,9 +38,9 @@ export const generateCalendar = (
 
   for (let i = 1; i <= totalDaysInMonth; i++) {
     const date = new Date(year, month, i);
-    const events = eventsData.filter(
-      (e) => e.date.toDateString() === date.toDateString()
-    );
+    const events = eventsData.filter((e) => {
+      return new Date(e.date).toDateString() === date.toDateString();
+    });
     days.push({
       date: new Date(year, month, i),
       currentMonth: true,
@@ -52,7 +52,7 @@ export const generateCalendar = (
   for (let i = 1; i <= nextMonthDays; i++) {
     const date = new Date(nextYear, nextMonth, i);
     const events = eventsData.filter(
-      (e) => e.date.toDateString() === date.toDateString()
+      (e) => new Date(e.date).toDateString() === date.toDateString()
     );
 
     days.push({

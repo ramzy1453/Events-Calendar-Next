@@ -23,8 +23,13 @@ export default class UserApi {
     return response.data;
   }
 
-  static async verify() {
-    const response = await Http.post<IUser, null>("/user/verify", null, {});
+  static async verify(token?: string) {
+    const response = await Http.post<IUser, null>("/user/verify", null, {
+      headers: {
+        Cookie: `token=${token}`,
+      },
+      withCredentials: true,
+    });
     return response?.data;
   }
   static async logout() {

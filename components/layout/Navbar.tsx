@@ -165,6 +165,8 @@ export default function Navbar() {
             <HoverCard openDelay={0} closeDelay={0}>
               <HoverCardTrigger asChild>
                 <Image
+                  width={32}
+                  height={32}
                   src={"https://assets.aceternity.com/demos/babbu-maan.jpeg"}
                   alt="Profile"
                   className="h-8 w-8 rounded-full object-cover cursor-pointer"
@@ -173,13 +175,17 @@ export default function Navbar() {
               <HoverCardContent align="end" className="w-64">
                 <div className="flex items-center gap-4">
                   <Image
+                    width={32}
+                    height={32}
                     src={"https://assets.aceternity.com/demos/babbu-maan.jpeg"}
                     alt="Profile"
                     className="h-10 w-10 rounded-full object-cover"
                   />
                   <div className="flex-1">
                     <h4 className="text-sm font-semibold">{user?.name}</h4>
-                    <p className="text-sm text-muted-foreground">{"Damas"}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {user?.email}
+                    </p>
                   </div>
                 </div>
                 <Separator className="my-4" />

@@ -1,11 +1,15 @@
 "use client";
-import CalendarDayEvent from "@/components/events/calendar/CalendarDayEvent";
-import CalendarEventPopup from "@/components/events/calendar/CalendarEventPopup";
 import { generateCalendar } from "@/utils/calendar";
-import { IDay, IEvent } from "@/types";
+import { IDay } from "@/types";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { useGetRoomEventsQuery } from "@/lib/services/event.service";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import AddEventPopup from "@/components/events/calendar/AddEventPopup";
+import CalendarDayEvent from "@/components/events/calendar/CalendarDayEvent";
+import CalendarEventPopup from "@/components/events/calendar/CalendarEventPopup";
 
 const months = moment.months();
 const weekdays = [
@@ -17,17 +21,20 @@ const weekdays = [
   "Saturday",
   "Sunday",
 ];
-export default function EventsCalendar() {
-  const params = useParams();
-  const eventId = params.eventId;
+export default function RoomCalendar() {
+  const { roomId } = useParams() as { roomId: string };
 
-  const [open, setOpen] = useState(false);
+  const { data } = useGetRoomEventsQuery(roomId);
+  const events = data?.data || [];
+
   const [selectedDay, setSelectedDay] = useState<IDay | null>();
+  const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState({
     month: new Date().getMonth(),
     year: new Date().getFullYear(),
   });
 
+  console.log({ isCreateEventOpen });
   const nextMonth = () => {
     setCurrentDate((prevDate) => {
       if (prevDate.month === 11) {
@@ -51,25 +58,20 @@ export default function EventsCalendar() {
       year: new Date().getFullYear(),
     });
   };
-  const closeModal = () => {
-    setOpen(false);
-  };
-  const openModal = (day: IDay | null) => () => {
-    setOpen(true);
-    setSelectedDay(day);
-  };
 
   const renderCalendar = (month: number, year: number) => {
-    const calendar = generateCalendar(month, year, eventsData);
+    const calendar = generateCalendar(month, year, events);
 
     return calendar.map((day, i) => {
       return (
         <CalendarDayEvent
           key={i}
           date={day.date}
-          onClick={openModal(day)}
+          onClick={() => setSelectedDay(day)}
           isSameMonth={day.currentMonth}
-          isToday={day.date.toDateString() === new Date().toDateString()}
+          isToday={
+            new Date(day.date).toDateString() === new Date().toDateString()
+          }
           events={day.events}
         />
       );
@@ -80,13 +82,20 @@ export default function EventsCalendar() {
     <div className="flex-[3] border p-4 space-y-4">
       {selectedDay && (
         <CalendarEventPopup
-          open={open}
+          open={!!selectedDay}
           day={selectedDay}
-          onClose={closeModal}
+          onClose={() => setSelectedDay(null)}
+        />
+      )}
+      {isCreateEventOpen && (
+        <AddEventPopup
+          open={isCreateEventOpen}
+          onClose={() => setIsCreateEventOpen(false)}
+          roomId={roomId}
         />
       )}
       <div className="flex justify-between items-center">
-        <div>{eventId}</div>
+        <div>{"Lore te3 one piece"}</div>
         <h1>
           {months[currentDate.month]} {currentDate.year}
         </h1>
@@ -124,44 +133,49 @@ export default function EventsCalendar() {
           {renderCalendar(currentDate.month, currentDate.year)}
         </div>
       </div>
+      <div>
+        <Button onClick={() => setIsCreateEventOpen(true)}>
+          <Plus /> Add event
+        </Button>
+      </div>
     </div>
   );
 }
 
-const eventsData: IEvent[] = [
-  {
-    id: "2",
-    title: "Conférence DevOps",
-    date: new Date(2025, 1, 19, 17, 0),
-    description: "Discussion sur les bonnes pratiques DevOps.",
-    color: "blue",
-  },
-  {
-    id: "3",
-    title: "Hackathon",
-    date: new Date(2026, 6, 4, 9, 0),
-    description: "Compétition de programmation sur 3 jours.",
-    color: "red",
-  },
-  {
-    id: "6",
-    title: "Hackathon IA",
-    date: new Date(2024, 1, 20, 8, 0),
-    description: "Un hackathon dédié à l'intelligence artificielle.",
-    color: "green",
-  },
-  {
-    id: "7",
-    title: "Sprint Dev Web",
-    date: new Date(2025, 0, 25, 9, 30),
-    description: "Sprint intensif pour développer une application web.",
-    color: "orange",
-  },
-  {
-    id: "8",
-    title: "Aller au lac hilya",
-    date: new Date(2025, 0, 25, 10, 30),
-    description: "Sortie au lac hilya.",
-    color: "orange",
-  },
-];
+// const eventsData = [
+//   {
+//     id: "2",
+//     title: "Conférence DevOps",
+//     date: new Date(2025, 1, 19, 17, 0),
+//     description: "Discussion sur les bonnes pratiques DevOps.",
+//     color: "blue",
+//   },
+//   {
+//     id: "3",
+//     title: "Hackathon",
+//     date: new Date(2026, 6, 4, 9, 0),
+//     description: "Compétition de programmation sur 3 jours.",
+//     color: "red",
+//   },
+//   {
+//     id: "6",
+//     title: "Hackathon IA",
+//     date: new Date(2024, 1, 20, 8, 0),
+//     description: "Un hackathon dédié à l'intelligence artificielle.",
+//     color: "green",
+//   },
+//   {
+//     id: "7",
+//     title: "Sprint Dev Web",
+//     date: new Date(2025, 0, 25, 9, 30),
+//     description: "Sprint intensif pour développer une application web.",
+//     color: "orange",
+//   },
+//   {
+//     id: "8",
+//     title: "Aller au lac hilya",
+//     date: new Date(2025, 0, 25, 10, 30),
+//     description: "Sortie au lac hilya.",
+//     color: "orange",
+//   },
+// ];

@@ -27,10 +27,12 @@ export default function CalendarEventPopup({ open, day, onClose }: Props) {
           ) : (
             events.map((event) => (
               <div
-                key={event.id}
+                key={event._id}
                 className="mb-4 p-2 rounded shadow border cursor-pointer hover:bg-black/75"
               >
-                <h3 className="font-bold">{event.title}</h3>
+                <h3 className="font-bold">
+                  {event.name} by ({event.user.name})
+                </h3>
                 <p className="text-sm text-gray-600">{event.description}</p>
                 <p className="text-sm text-gray-600">
                   {moment(event.date).format("HH:mm")}

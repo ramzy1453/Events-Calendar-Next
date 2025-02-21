@@ -170,12 +170,5 @@ export default function RoomCalendar() {
 //     date: new Date(2025, 0, 25, 9, 30),
 //     description: "Sprint intensif pour développer une application web.",
 //     color: "orange",
-//   },
-//   {
-//     id: "8",
-//     title: "Aller au lac hilya",
-//     date: new Date(2025, 0, 25, 10, 30),
-//     description: "Sortie au lac hilya.",
-//     color: "orange",
-//   },
+//   }
 // ];

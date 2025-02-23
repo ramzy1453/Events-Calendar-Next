@@ -81,69 +81,72 @@ export default function RoomCalendar() {
     });
   };
 
-  if (isLoading) return <CalendarSkeleton />;
-
   return (
     <div className="flex-[3] border p-4 space-y-4">
-      {selectedDay && (
-        <CalendarEventPopup
-          open={!!selectedDay}
-          day={selectedDay}
-          onClose={() => setSelectedDay(null)}
-        />
-      )}
-      {isCreateEventOpen && (
-        <AddEventPopup
-          open={isCreateEventOpen}
-          onClose={() => setIsCreateEventOpen(false)}
-          roomId={roomId}
-        />
-      )}
-      <div className="flex justify-between items-center">
-        <div>{"Lore te3 one piece"}</div>
-
-        <h1>
-          {months[currentDate.month]} {currentDate.year}
-        </h1>
-        <div className="space-x-2">
-          <button
-            onClick={previousMonth}
-            className="border hover:bg-foreground/10 cursor-pointer py-0.5 px-2"
-          >
-            Previous
-          </button>
-          <button
-            onClick={goToday}
-            className="border hover:bg-foreground/10 cursor-pointer py-0.5 px-2"
-          >
-            Today
-          </button>{" "}
-          <button
-            onClick={nextMonth}
-            className="border hover:bg-foreground/10 cursor-pointer py-0.5 px-2"
-          >
-            Next
-          </button>
-        </div>
-      </div>
-      <div className="relative">
-        <div className="grid grid-cols-7 gap-2">
-          {weekdays.map((day) => (
-            <div
-              key={day}
-              className="border shadow-xl py-1 px-2 hover:bg-foreground/10 cursor-pointer"
-            >
-              {day}
+      {isLoading ? (
+        <CalendarSkeleton />
+      ) : (
+        <>
+          {selectedDay && (
+            <CalendarEventPopup
+              open={!!selectedDay}
+              day={selectedDay}
+              onClose={() => setSelectedDay(null)}
+            />
+          )}
+          {isCreateEventOpen && (
+            <AddEventPopup
+              open={isCreateEventOpen}
+              onClose={() => setIsCreateEventOpen(false)}
+              roomId={roomId}
+            />
+          )}
+          <div className="flex justify-between items-center">
+            <div>{"Lore te3 one piece"}</div>
+            <h1>
+              {months[currentDate.month]} {currentDate.year}
+            </h1>
+            <div className="space-x-2">
+              <button
+                onClick={previousMonth}
+                className="border hover:bg-foreground/10 cursor-pointer py-0.5 px-2"
+              >
+                Previous
+              </button>
+              <button
+                onClick={goToday}
+                className="border hover:bg-foreground/10 cursor-pointer py-0.5 px-2"
+              >
+                Today
+              </button>{" "}
+              <button
+                onClick={nextMonth}
+                className="border hover:bg-foreground/10 cursor-pointer py-0.5 px-2"
+              >
+                Next
+              </button>
             </div>
-          ))}
-          {renderCalendar(currentDate.month, currentDate.year)}
-        </div>
-      </div>
-      <div>
-        <Button onClick={() => setIsCreateEventOpen(true)}>
-          <Plus /> Add event
-        </Button>
-      </div>
+          </div>
+          <div className="relative">
+            <div className="grid grid-cols-7 gap-2">
+              {weekdays.map((day) => (
+                <div
+                  key={day}
+                  className="border shadow-xl py-1 px-2 hover:bg-foreground/10 cursor-pointer"
+                >
+                  {day}
+                </div>
+              ))}
+              {renderCalendar(currentDate.month, currentDate.year)}
+            </div>
+          </div>
+          <div>
+            <Button onClick={() => setIsCreateEventOpen(true)}>
+              <Plus /> Add event
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

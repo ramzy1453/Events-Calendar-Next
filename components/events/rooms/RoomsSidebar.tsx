@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import RoomItem from "./RoomItem";
 import { IRoom } from "@/types/room";
+import { useRouter } from "next/navigation";
 
 type Props = { rooms: IRoom[] };
 export default function RoomsSidebar({ rooms }: Props) {
@@ -12,6 +13,7 @@ export default function RoomsSidebar({ rooms }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const id = useId();
 
+  const router = useRouter();
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -105,14 +107,16 @@ export default function RoomsSidebar({ rooms }: Props) {
                     </motion.p>
                   </div>
 
-                  <motion.a
+                  <motion.button
                     layoutId={`button-${active.name}-${id}`}
-                    href={"/"}
-                    target="_blank"
+                    onClick={() => {
+                      setActive(null);
+                      router.push(`/calendar/${active._id}`);
+                    }}
                     className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white"
                   >
                     Join
-                  </motion.a>
+                  </motion.button>
                 </div>
               </div>
             </motion.div>

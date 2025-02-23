@@ -10,6 +10,7 @@ import { Plus } from "lucide-react";
 import AddEventPopup from "@/components/events/calendar/AddEventPopup";
 import CalendarDayEvent from "@/components/events/calendar/CalendarDayEvent";
 import CalendarEventPopup from "@/components/events/calendar/CalendarEventPopup";
+import CalendarSkeleton from "@/components/events/calendar/CalendarSkeleton";
 
 const months = moment.months();
 const weekdays = [
@@ -24,8 +25,10 @@ const weekdays = [
 export default function RoomCalendar() {
   const { roomId } = useParams() as { roomId: string };
 
-  const { data } = useGetRoomEventsQuery(roomId);
+  const { data, isLoading } = useGetRoomEventsQuery(roomId);
+
   const events = data?.data || [];
+  console.log({ roomId, events });
 
   const [selectedDay, setSelectedDay] = useState<IDay | null>();
   const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
@@ -78,6 +81,8 @@ export default function RoomCalendar() {
     });
   };
 
+  if (isLoading) return <CalendarSkeleton />;
+
   return (
     <div className="flex-[3] border p-4 space-y-4">
       {selectedDay && (
@@ -96,6 +101,7 @@ export default function RoomCalendar() {
       )}
       <div className="flex justify-between items-center">
         <div>{"Lore te3 one piece"}</div>
+
         <h1>
           {months[currentDate.month]} {currentDate.year}
         </h1>

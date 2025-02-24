@@ -7,7 +7,7 @@ export default class RoomApi {
 
     return response?.data;
   }
-  static async getRooms() {
+  static async getUserRooms() {
     const response = await Http.get<IRoom[]>("/room");
 
     return response?.data;
@@ -32,7 +32,16 @@ export default class RoomApi {
   }
 
   static async joinRoom(id: string) {
-    const response = await Http.post<IRoom, null>(`/room/join/${id}`, null);
+    const response = await Http.get(`/room/join/${id}`);
+
+    return response?.data;
+  }
+
+  static async createMagicLink(id: string) {
+    const response = await Http.post<{ magicLink: string }, null>(
+      `/room/magic-link/${id}`,
+      null
+    );
 
     return response?.data;
   }

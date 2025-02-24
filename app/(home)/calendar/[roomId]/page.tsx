@@ -6,11 +6,12 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useGetRoomEventsQuery } from "@/lib/services/event.service";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, User } from "lucide-react";
 import AddEventPopup from "@/components/events/calendar/AddEventPopup";
 import CalendarDayEvent from "@/components/events/calendar/CalendarDayEvent";
 import CalendarEventPopup from "@/components/events/calendar/CalendarEventPopup";
 import CalendarSkeleton from "@/components/events/calendar/CalendarSkeleton";
+import MagicLinkPopup from "@/components/events/calendar/MagicLinkPopup";
 
 const months = moment.months();
 const weekdays = [
@@ -31,13 +32,14 @@ export default function RoomCalendar() {
   console.log({ roomId, events });
 
   const [selectedDay, setSelectedDay] = useState<IDay | null>();
-  const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
+  const [isAddEventPopupOpen, setIsAddEventPopupOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState({
     month: new Date().getMonth(),
     year: new Date().getFullYear(),
   });
 
-  console.log({ isCreateEventOpen });
+  const [isMagicLinkOpen, setIsMagicLinkOpen] = useState(false);
+
   const nextMonth = () => {
     setCurrentDate((prevDate) => {
       if (prevDate.month === 11) {
@@ -94,13 +96,21 @@ export default function RoomCalendar() {
               onClose={() => setSelectedDay(null)}
             />
           )}
-          {isCreateEventOpen && (
+          {isAddEventPopupOpen && (
             <AddEventPopup
-              open={isCreateEventOpen}
-              onClose={() => setIsCreateEventOpen(false)}
+              open={isAddEventPopupOpen}
+              onClose={() => setIsAddEventPopupOpen(false)}
               roomId={roomId}
             />
           )}
+          {isMagicLinkOpen && (
+            <MagicLinkPopup
+              open={isMagicLinkOpen}
+              onClose={() => setIsMagicLinkOpen(false)}
+              roomId={roomId}
+            />
+          )}
+
           <div className="flex justify-between items-center">
             <div>{"Lore te3 one piece"}</div>
             <h1>
@@ -140,9 +150,12 @@ export default function RoomCalendar() {
               {renderCalendar(currentDate.month, currentDate.year)}
             </div>
           </div>
-          <div>
-            <Button onClick={() => setIsCreateEventOpen(true)}>
+          <div className="flex justify-between">
+            <Button onClick={() => setIsAddEventPopupOpen(true)}>
               <Plus /> Add event
+            </Button>
+            <Button onClick={() => setIsMagicLinkOpen(true)}>
+              <User /> Invite user to room
             </Button>
           </div>
         </>
@@ -150,34 +163,3 @@ export default function RoomCalendar() {
     </div>
   );
 }
-
-// const eventsData = [
-//   {
-//     id: "2",
-//     title: "Conférence DevOps",
-//     date: new Date(2025, 1, 19, 17, 0),
-//     description: "Discussion sur les bonnes pratiques DevOps.",
-//     color: "blue",
-//   },
-//   {
-//     id: "3",
-//     title: "Hackathon",
-//     date: new Date(2026, 6, 4, 9, 0),
-//     description: "Compétition de programmation sur 3 jours.",
-//     color: "red",
-//   },
-//   {
-//     id: "6",
-//     title: "Hackathon IA",
-//     date: new Date(2024, 1, 20, 8, 0),
-//     description: "Un hackathon dédié à l'intelligence artificielle.",
-//     color: "green",
-//   },
-//   {
-//     id: "7",
-//     title: "Sprint Dev Web",
-//     date: new Date(2025, 0, 25, 9, 30),
-//     description: "Sprint intensif pour développer une application web.",
-//     color: "orange",
-//   }
-// ];

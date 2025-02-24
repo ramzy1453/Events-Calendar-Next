@@ -5,7 +5,7 @@ import { ICreateRoom } from "@/types/room.d";
 export const useRoomsQuery = () => {
   return useQuery({
     queryKey: ["rooms"],
-    queryFn: RoomApi.getRooms,
+    queryFn: RoomApi.getUserRooms,
   });
 };
 
@@ -48,16 +48,26 @@ export const useDeleteRoomMutation = () => {
   });
 };
 
-export const useJoinRoomMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (id: string) => RoomApi.joinRoom(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["rooms"] });
-    },
+export const useJoinRoomQuery = (id: string) => {
+  return useQuery({
+    queryKey: ["joinRoom", id],
+    queryFn: () => RoomApi.joinRoom(id),
+    enabled: !!id,
   });
 };
 
+export const useCreateMagicLinkMutation = () => {
+  return useMutation({
+    mutationKey: ["createMagicLink"],
+    mutationFn: (id: string) => RoomApi.createMagicLink(id),
+  });
+};
+export const useCreateMagicLinkQuery = (id: string) => {
+  return useQuery({
+    queryKey: ["createMagicLink", id],
+    queryFn: () => RoomApi.createMagicLink(id),
+  });
+};
 export const useLeaveRoomMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({

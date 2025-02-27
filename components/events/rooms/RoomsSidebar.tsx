@@ -78,7 +78,9 @@ export default function RoomsSidebar({ rooms }: Props) {
                   priority
                   width={200}
                   height={200}
-                  src={"https://assets.aceternity.com/demos/babbu-maan.jpeg"}
+                  src={
+                    "https://img9.irna.ir/d/r2/2024/08/26/4/171360290.jpg?ts=1724685216150"
+                  }
                   alt={active.name}
                   className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
                 />
@@ -131,7 +133,9 @@ export default function RoomsSidebar({ rooms }: Props) {
             key={i}
             id={id}
             title={card.name}
-            src={"https://assets.aceternity.com/demos/babbu-maan.jpeg"}
+            src={
+              "https://img9.irna.ir/d/r2/2024/08/26/4/171360290.jpg?ts=1724685216150"
+            }
             description={card.description}
             setActive={() => {
               setActive(card);

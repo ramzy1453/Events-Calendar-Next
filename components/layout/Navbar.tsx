@@ -168,7 +168,9 @@ export default function Navbar() {
                 <Image
                   width={32}
                   height={32}
-                  src={"https://assets.aceternity.com/demos/babbu-maan.jpeg"}
+                  src={
+                    "https://img9.irna.ir/d/r2/2024/08/26/4/171360290.jpg?ts=1724685216150"
+                  }
                   alt="Profile"
                   className="h-8 w-8 rounded-full object-cover cursor-pointer"
                 />
@@ -178,7 +180,9 @@ export default function Navbar() {
                   <Image
                     width={32}
                     height={32}
-                    src={"https://assets.aceternity.com/demos/babbu-maan.jpeg"}
+                    src={
+                      "https://img9.irna.ir/d/r2/2024/08/26/4/171360290.jpg?ts=1724685216150"
+                    }
                     alt="Profile"
                     className="h-10 w-10 rounded-full object-cover"
                   />

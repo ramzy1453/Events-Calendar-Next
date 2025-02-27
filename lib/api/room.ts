@@ -1,5 +1,5 @@
 import { Http } from "./http";
-import { ICreateRoom, IRoom } from "@/types/room.d";
+import { ICreateRoom, IMember, IRoom } from "@/types/room.d";
 
 export default class RoomApi {
   static async createRoom(room: ICreateRoom) {
@@ -53,7 +53,7 @@ export default class RoomApi {
   }
 
   static async getRoomMembers(id: string) {
-    const response = await Http.get<IRoom>(`/room/${id}/user`);
+    const response = await Http.get<IMember[]>(`/room/${id}/user`);
 
     return response?.data;
   }

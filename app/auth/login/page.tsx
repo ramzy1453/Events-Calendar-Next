@@ -8,9 +8,11 @@ import { ILogin } from "@/types/user";
 import { toast } from "sonner";
 import { loginSchema } from "@/lib/validation/user.schema";
 import { useLoginMutation } from "@/lib/services/user.service";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const { mutateAsync: login } = useLoginMutation();
+  const router = useRouter();
 
   const formik = useFormik<ILogin>({
     initialValues: {
@@ -26,8 +28,8 @@ export default function LoginPage() {
           return error.response.data.message || "Error during connection";
         },
       });
-      // formik.resetForm();
-      // router.push("/dashboard/clients");
+      formik.resetForm();
+      router.push("/");
     },
   });
 

@@ -1,6 +1,6 @@
 "use client";
 import moment from "moment";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useGetRoomEventsQuery } from "@/lib/services/event.service";
 import { Button } from "@/components/ui/button";
 import { Plus, User } from "lucide-react";
@@ -10,6 +10,9 @@ import CalendarEventPopup from "@/components/events/calendar/CalendarEventPopup"
 import CalendarSkeleton from "@/components/events/calendar/CalendarSkeleton";
 import MagicLinkPopup from "@/components/events/calendar/MagicLinkPopup";
 import { useCalendar } from "@/hooks/useCalendar";
+import { useRoomMembersQuery, useRoomQuery } from "@/lib/services/room.service";
+import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
+import { JoinedFromLinkAlert } from "@/components/events/calendar/JoinedFromLinkAlert";
 
 const months = moment.months();
 const weekdays = [
@@ -24,10 +27,17 @@ const weekdays = [
 export default function RoomCalendar() {
   const { roomId } = useParams() as { roomId: string };
 
-  const { data, isLoading } = useGetRoomEventsQuery(roomId);
+  const { data: roomData, isLoading: isRoomLoading } = useRoomQuery(roomId);
+  const { data: eventsData, isLoading: isEventsLoading } =
+    useGetRoomEventsQuery(roomId);
+  const { data: membersData, isLoading: isMembersLoading } =
+    useRoomMembersQuery(roomId);
 
-  const events = data?.data || [];
+  const room = roomData?.data || null;
+  const events = eventsData?.data || [];
+  const roomMembers = membersData?.data || [];
 
+  const isLoading = isRoomLoading || isEventsLoading || isMembersLoading;
   const {
     selectedDay,
     setSelectedDay,
@@ -41,6 +51,8 @@ export default function RoomCalendar() {
     goToday,
     calendar,
   } = useCalendar(events);
+
+  const hasJoinedFromLink = useSearchParams().get("joined") === "true";
 
   return (
     <div className="flex-[3] border p-4 space-y-4">
@@ -71,29 +83,35 @@ export default function RoomCalendar() {
           )}
 
           <div className="flex justify-between items-center">
-            <div>{"Lore te3 one piece"}</div>
-            <h1>
-              {months[currentDate.month]} {currentDate.year}
-            </h1>
-            <div className="space-x-2">
-              <button
-                onClick={previousMonth}
-                className="border hover:bg-foreground/10 cursor-pointer py-0.5 px-2"
-              >
-                Previous
-              </button>
-              <button
-                onClick={goToday}
-                className="border hover:bg-foreground/10 cursor-pointer py-0.5 px-2"
-              >
-                Today
-              </button>{" "}
-              <button
-                onClick={nextMonth}
-                className="border hover:bg-foreground/10 cursor-pointer py-0.5 px-2"
-              >
-                Next
-              </button>
+            <JoinedFromLinkAlert />
+            <div className="flex items-center justify-center space-x-4">
+              <h1>{room?.name}</h1>
+              <AnimatedTooltip members={roomMembers} />
+            </div>
+            <div className="flex space-x-4 items-center justify-center">
+              <h1>
+                {months[currentDate.month]} {currentDate.year}
+              </h1>
+              <div className="space-x-2">
+                <button
+                  onClick={previousMonth}
+                  className="border hover:bg-foreground/10 cursor-pointer py-0.5 px-2"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={goToday}
+                  className="border hover:bg-foreground/10 cursor-pointer py-0.5 px-2"
+                >
+                  Today
+                </button>{" "}
+                <button
+                  onClick={nextMonth}
+                  className="border hover:bg-foreground/10 cursor-pointer py-0.5 px-2"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
           <div className="relative">

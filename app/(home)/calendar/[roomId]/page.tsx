@@ -53,8 +53,9 @@ export default function RoomCalendar() {
     calendar,
   } = useCalendar(events);
 
-  const hasJoinedFromLink = useSearchParams().get("joined") === "true";
-  const [isAlertOpen, setIsAlertOpen] = useState(hasJoinedFromLink);
+  const [isAlertOpen, setIsAlertOpen] = useState(
+    useSearchParams().get("joined") === "true"
+  );
 
   return (
     <div className="flex-[3] border p-4 space-y-4">

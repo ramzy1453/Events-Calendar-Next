@@ -56,6 +56,14 @@ export const useJoinRoomQuery = (id: string) => {
   });
 };
 
+export const useInviteUserMutation = () => {
+  return useMutation({
+    mutationKey: ["inviteUser"],
+    mutationFn: ({ room, email }: { room: string; email: string }) =>
+      RoomApi.inviteUser(room, email),
+  });
+};
+
 export const useCreateMagicLinkMutation = () => {
   return useMutation({
     mutationKey: ["createMagicLink"],

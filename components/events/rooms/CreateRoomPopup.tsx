@@ -32,8 +32,8 @@ const validationSchema = Yup.object().shape({
     "fileSize",
     "The file is too large",
     (value) => {
-      if (!value) return true; // attachment is optional
-      return value.size <= 2000000; // 2MB
+      if (!value) return true;
+      return value.size <= 3 * 1024 * 1024;
     }
   ),
 });

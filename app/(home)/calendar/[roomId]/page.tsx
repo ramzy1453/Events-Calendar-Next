@@ -13,6 +13,7 @@ import { useCalendar } from "@/hooks/useCalendar";
 import { useRoomMembersQuery, useRoomQuery } from "@/lib/services/room.service";
 import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
 import { JoinedFromLinkAlert } from "@/components/events/calendar/JoinedFromLinkAlert";
+import { useState } from "react";
 
 const months = moment.months();
 const weekdays = [
@@ -53,7 +54,7 @@ export default function RoomCalendar() {
   } = useCalendar(events);
 
   const hasJoinedFromLink = useSearchParams().get("joined") === "true";
-  console.log({ hasJoinedFromLink });
+  const [isAlertOpen, setIsAlertOpen] = useState(hasJoinedFromLink);
 
   return (
     <div className="flex-[3] border p-4 space-y-4">
@@ -82,9 +83,17 @@ export default function RoomCalendar() {
               roomId={roomId}
             />
           )}
+          {isAlertOpen && (
+            <JoinedFromLinkAlert
+              roomName={room?.name || ""}
+              isOpen={isAlertOpen}
+              onClose={() => {
+                setIsAlertOpen(false);
+              }}
+            />
+          )}
 
           <div className="flex justify-between items-center">
-            <JoinedFromLinkAlert />
             <div className="flex items-center justify-center space-x-4">
               <h1>{room?.name}</h1>
               <AnimatedTooltip members={roomMembers} />

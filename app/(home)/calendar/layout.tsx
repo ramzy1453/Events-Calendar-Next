@@ -6,7 +6,6 @@ import React from "react";
 
 export default function Rooms({ children }: { children: React.ReactNode }) {
   const { data: rooms } = useRoomsQuery();
-  console.log({ rooms });
   return (
     <div className="flex h-[calc(100vh-4em)] space-x-4">
       <RoomsSidebar rooms={rooms?.data || []} />

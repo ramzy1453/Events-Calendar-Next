@@ -38,12 +38,15 @@ export default class RoomApi {
   }
 
   static async createMagicLink(id: string) {
-    const response = await Http.post<{ magicLink: string }, null>(
-      `/room/magic-link/${id}`,
-      null
-    );
+    const response = await fetch(`/api/room/magic-link/${id}`, {
+      method: "POST",
+    });
 
-    return response?.data;
+    const data = await response.json();
+
+    return data as {
+      magicLink: string;
+    };
   }
 
   static async leaveRoom(id: string) {

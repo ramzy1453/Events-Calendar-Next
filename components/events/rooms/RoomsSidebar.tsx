@@ -1,14 +1,17 @@
 import Image from "next/image";
-import React, { useEffect, useId, useRef, useState } from "react";
+import Link from "next/link";
+import { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import RoomItem from "./RoomItem";
 import { IRoom } from "@/types/room";
-import Link from "next/link";
+import { useLeaveRoomMutation } from "@/lib/services/room.service";
 
 type Props = { rooms: IRoom[] };
 export default function RoomsSidebar({ rooms }: Props) {
   const [active, setActive] = useState<IRoom | boolean | null>(null);
+
+  const { mutateAsync: leaveRoom } = useLeaveRoomMutation();
 
   const ref = useRef<HTMLDivElement>(null);
   const id = useId();
@@ -52,31 +55,23 @@ export default function RoomsSidebar({ rooms }: Props) {
       </AnimatePresence>
       <AnimatePresence>
         {active && typeof active === "object" ? (
-          <div className="fixed inset-0  grid place-items-center z-[100]">
+          <div className="fixed inset-0 grid place-items-center z-[100]">
             <motion.button
               key={`button-${active.name}-${id}`}
               layout
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-                transition: {
-                  duration: 0.05,
-                },
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.05 } }}
               className="flex absolute top-2 right-2 lg:hidden items-center justify-center bg-white rounded-full h-6 w-6"
               onClick={() => setActive(null)}
             >
               <CloseIcon />
             </motion.button>
+
             <motion.div
               layoutId={`card-${active.name}-${id}`}
               ref={ref}
-              className="w-full max-w-[500px]  h-full md:h-fit md:max-h-[90%]  flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
+              className="w-full max-w-[500px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
             >
               <motion.div layoutId={`image-${active.name}-${id}`}>
                 <Image
@@ -91,7 +86,7 @@ export default function RoomsSidebar({ rooms }: Props) {
 
               <div>
                 <div className="flex justify-between items-start p-4">
-                  <div className="">
+                  <div>
                     <motion.h3
                       layoutId={`name-${active.name}-${id}`}
                       className="font-bold text-neutral-700 dark:text-neutral-200"
@@ -106,17 +101,24 @@ export default function RoomsSidebar({ rooms }: Props) {
                     </motion.p>
                   </div>
 
-                  <Link href={`/calendar/${active._id}`}>
+                  <div className="flex gap-2">
+                    <Link href={`/calendar/${active._id}`}>
+                      <motion.button
+                        layoutId={`button-${active.name}-${id}`}
+                        onClick={() => setActive(null)}
+                        className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white"
+                      >
+                        Join
+                      </motion.button>
+                    </Link>
+
                     <motion.button
-                      layoutId={`button-${active.name}-${id}`}
-                      onClick={() => {
-                        setActive(null);
-                      }}
-                      className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white"
+                      onClick={() => leaveRoom(active._id)}
+                      className="px-4 py-3 text-sm rounded-full font-bold bg-red-500 text-white"
                     >
-                      Join
+                      Leave
                     </motion.button>
-                  </Link>
+                  </div>
                 </div>
               </div>
             </motion.div>

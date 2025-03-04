@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ImagePlus } from "lucide-react";
 import Image from "next/image";
+import { addRoomSchema } from "@/lib/validation/room.schema";
+import { useCreateRoomMutation } from "@/lib/services/room.service";
 
 interface CreateRoomPopupProps {
   isOpen: boolean;
@@ -25,21 +26,9 @@ interface RoomFormValues {
   image: File | null;
 }
 
-const validationSchema = Yup.object().shape({
-  name: Yup.string().required("Room name is required"),
-  description: Yup.string(),
-  image: Yup.mixed<File>().test(
-    "fileSize",
-    "The file is too large",
-    (value) => {
-      if (!value) return true;
-      return value.size <= 3 * 1024 * 1024;
-    }
-  ),
-});
-
 export function CreateRoomPopup({ isOpen, onClose }: CreateRoomPopupProps) {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const { mutateAsync: createRoom } = useCreateRoomMutation();
 
   const initialValues: RoomFormValues = {
     name: "",
@@ -47,24 +36,35 @@ export function CreateRoomPopup({ isOpen, onClose }: CreateRoomPopupProps) {
     image: null,
   };
 
-  const handleSubmit = (
+  const handleSubmit = async (
     values: RoomFormValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
-    console.log(values);
-    setSubmitting(false);
-    onClose();
+    try {
+      const response = await createRoom(values);
+      console.log({ response });
+      setSubmitting(false);
+      onClose();
+    } catch (error) {
+      console.log({ error });
+    }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={() => {
+        setPreviewImage(null);
+        onClose();
+      }}
+    >
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create New Room</DialogTitle>
         </DialogHeader>
         <Formik
           initialValues={initialValues}
-          validationSchema={validationSchema}
+          validationSchema={addRoomSchema}
           onSubmit={handleSubmit}
         >
           {({ errors, touched, setFieldValue, isSubmitting }) => (
@@ -138,7 +138,8 @@ export function CreateRoomPopup({ isOpen, onClose }: CreateRoomPopupProps) {
                       src={previewImage || "/placeholder.svg"}
                       alt="Preview"
                       className="ml-3 h-16 w-16 object-cover rounded-md"
-                      width={64}
+                      width={128}
+                      height={128}
                     />
                   )}
                 </div>

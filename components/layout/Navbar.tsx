@@ -21,53 +21,25 @@ import { useUser } from "@/hooks/useUser";
 import { useLogoutMutation } from "@/lib/services/user.service";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-
-type Notification = {
-  id: string;
-  title: string;
-  description: string;
-  time: string;
-  read: boolean;
-};
+import { useNotifications } from "@/hooks/useNotifications";
 
 export default function Navbar() {
-  const [notifications, setNotifications] = React.useState<Notification[]>([
-    {
-      id: "1",
-      title: "New Job Match",
-      description: "A new job matching your profile has been posted",
-      time: "2 minutes ago",
-      read: false,
-    },
-    {
-      id: "2",
-      title: "Application Update",
-      description: "Your application has been reviewed",
-      time: "1 hour ago",
-      read: false,
-    },
-    {
-      id: "3",
-      title: "Profile View",
-      description: "A company viewed your profile",
-      time: "2 hours ago",
-      read: true,
-    },
-  ]);
+  const notifications = useNotifications((state) => state.notifications);
+  // const setNotifications = useNotifications((state) => state.setNotifications);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
-  const markAsRead = (id: string) => {
-    setNotifications((notifications) =>
-      notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
-  };
+  // const markAsRead = (id: string) => {
+  //   setNotifications(
+  //     notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
+  //   );
+  // };
 
-  const markAllAsRead = () => {
-    setNotifications((notifications) =>
-      notifications.map((n) => ({ ...n, read: true }))
-    );
-  };
+  // const markAllAsRead = () => {
+  //   setNotifications((notifications) =>
+  //     notifications.map((n) => ({ ...n, read: true }))
+  //   );
+  // };
 
   const user = useUser((state) => state.user);
   const clearUser = useUser((state) => state.clearUser);
@@ -110,7 +82,7 @@ export default function Navbar() {
                     <Button
                       variant="ghost"
                       className="text-xs text-muted-foreground"
-                      onClick={markAllAsRead}
+                      // onClick={markAllAsRead}
                     >
                       Mark all as read
                     </Button>
@@ -120,29 +92,29 @@ export default function Navbar() {
                 <ScrollArea className="h-[400px]">
                   {notifications.length > 0 ? (
                     <div className="grid gap-1">
-                      {notifications.map((notification) => (
+                      {notifications.map((notification, i) => (
                         <button
-                          key={notification.id}
+                          key={i}
                           className={cn(
                             "flex w-full items-start gap-4 p-4 text-left",
                             !notification.read && "bg-muted/50"
                           )}
-                          onClick={() => markAsRead(notification.id)}
+                          // onClick={() => markAsRead(notification.id)}
                         >
                           <div className="flex-1 space-y-1">
                             <div className="flex items-center gap-2">
                               <div className="font-medium">
-                                {notification.title}
+                                {JSON.stringify(notification.content)}
                               </div>
                               {!notification.read && (
                                 <span className="flex h-2 w-2 rounded-full bg-primary" />
                               )}
                             </div>
                             <div className="text-sm text-muted-foreground">
-                              {notification.description}
+                              {"notification.description"}
                             </div>
                             <div className="text-xs text-muted-foreground">
-                              {notification.time}
+                              {"notification.time"}
                             </div>
                           </div>
                         </button>

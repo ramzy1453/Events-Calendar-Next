@@ -1,10 +1,12 @@
 "use client";
+import { useNotifications } from "@/hooks/useNotifications";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 const NotificationListener = () => {
   const abortControllerRef = useRef(new AbortController());
+  const addNotification = useNotifications((state) => state.addNotification);
 
   const room = useParams().roomId;
   useEffect(() => {
@@ -17,7 +19,9 @@ const NotificationListener = () => {
       const notification = JSON.parse(event.data);
 
       const data = JSON.parse(notification.content);
-      console.log({ data });
+      const type = notification.type;
+
+      addNotification({ content: data, type, read: false });
 
       switch (notification.type) {
         case "new_event":

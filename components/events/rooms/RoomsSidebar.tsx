@@ -127,7 +127,7 @@ export default function RoomsSidebar({ rooms }: Props) {
           </div>
         ) : null}
       </AnimatePresence>
-      <ul className="max-w-2xl mx-auto w-full gap-4">
+      <ul className="max-w-2xl mx-auto w-full gap-4 border">
         {rooms.map((card, i) => (
           <RoomItem
             key={i}

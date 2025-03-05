@@ -52,7 +52,6 @@ export default function AddEventPopup({ open, onClose, roomId }: Props) {
       onClose();
     },
   });
-  console.log({ errorDate: formik.errors });
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>

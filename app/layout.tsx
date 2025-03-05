@@ -5,6 +5,7 @@ import "./globals.css";
 import ReactQueryProvider from "@/lib/providers/react-query";
 import { Toaster } from "sonner";
 import AuthProvider from "@/components/auth/AuthProvider.server";
+import NotificationListener from "@/components/NotificationsListner";
 
 export const metadata: Metadata = {
   title: "Events Calendar",
@@ -21,6 +22,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Toaster />
+          <NotificationListener />
           <ReactQueryProvider>
             <AuthProvider>
               <main className="dark">{children}</main>

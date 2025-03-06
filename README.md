@@ -1,37 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Event Calendar Frontend
 
-## Getting Started
+This is the **frontend** of the Event Calendar application, built with **Next.js** for server-side rendering (SSR) and optimized performance. Users can create rooms, manage calendars, and view scheduled events in real-time.
 
-First, run the development server:
+## 🚀 Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Next.js** – for SSR and optimized performance
+- **React Query** – for efficient data fetching and caching
+- **Axios** – for API communication
+- **Socket.io Client** – for real-time updates
+- **Event Source (SSE)** – for server-sent events
+- **Algorithm for calendar generation** – for generating and managing the calendar structure dynamically based on events
+
+## 📂 Project Structure
+
+```
+frontend/
+├── app/
+│   ├── (home)/
+│   ├── auth/
+│   │   ├── login/
+│   │   │   ├── page.tsx
+│   │   ├── signup/
+│   │   │   ├── layout.tsx
+│   │   │   ├── page.tsx
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── page.tsx
+│
+├── components/
+│   ├── auth/
+│   ├── events/
+│   ├── layout/
+│   ├── ui/
+│   │   ├── NotificationsListener.tsx
+│
+├── hooks/
+├── lib/
+│   ├── api/
+│   ├── providers/
+│   ├── services/
+│   ├── validation/
+│   ├── utils.ts
+│
+└── node_modules/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Setup & Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```sh
+   git clone https://github.com/ramzy1453/Next-Calendar-Events.git
+   cd Calendar-Events-Backend
+   ```
 
-## Learn More
+2. **Install dependencies**
 
-To learn more about Next.js, take a look at the following resources:
+   ```sh
+   npm install
+   # or
+   yarn install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Create a `.env.local` file** with the required environment variables:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```sh
+    NODE_ENV=development
+    NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
+   ```
 
-## Deploy on Vercel
+4. **Run the development server**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```sh
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-"# Next-Caledar-Events" 
+5. **Open in browser**
+   Visit `http://localhost:3000` to view the app.
+
+## 📡 Real-Time Features
+
+- Uses **Socket.io** for instant event updates
+- Implements **Server-Sent Events (SSE)** for real-time notifications
+- Efficient **React Query caching** for seamless experience
+
+---
+
+### 📌 Contributing
+
+Feel free to submit issues or pull requests if you’d like to improve the project!
+
+### 📄 License
+
+This project is licensed under [MIT License](LICENSE).

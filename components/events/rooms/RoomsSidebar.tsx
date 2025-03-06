@@ -6,13 +6,14 @@ import { useOutsideClick } from "@/hooks/useOutsideClick";
 import RoomItem from "./RoomItem";
 import { IRoom } from "@/types/room";
 import { useLeaveRoomMutation } from "@/lib/services/room.service";
+import { useRouter } from "next/navigation";
 
 type Props = { rooms: IRoom[] };
 export default function RoomsSidebar({ rooms }: Props) {
   const [active, setActive] = useState<IRoom | boolean | null>(null);
 
   const { mutateAsync: leaveRoom } = useLeaveRoomMutation();
-
+  const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
   const id = useId();
 
@@ -115,7 +116,11 @@ export default function RoomsSidebar({ rooms }: Props) {
                     </Link>
 
                     <motion.button
-                      onClick={() => leaveRoom(active._id)}
+                      onClick={() => {
+                        leaveRoom(active._id).then(() =>
+                          router.push("/calendar")
+                        );
+                      }}
                       className="px-4 py-3 text-sm rounded-full font-bold bg-red-500 text-white"
                     >
                       Leave

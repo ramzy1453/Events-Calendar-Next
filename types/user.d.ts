@@ -16,3 +16,8 @@ export interface ILogin {
   email: string;
   password: string;
 }
+
+export interface IOTP {
+  email: string;
+  otp: string;
+}

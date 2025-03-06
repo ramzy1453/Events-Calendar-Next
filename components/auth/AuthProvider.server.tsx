@@ -12,7 +12,11 @@ export default async function AuthProvider({
     const token = nextCookies.get("token")?.value;
     const user = await UserApi.verify(token);
 
-    return <RequireAuth user={user.data}>{children}</RequireAuth>;
+    return (
+      <RequireAuth token={token} user={user.data}>
+        {children}
+      </RequireAuth>
+    );
   } catch {
     return <>{children}</>;
   }

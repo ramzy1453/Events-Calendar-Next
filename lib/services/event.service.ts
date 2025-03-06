@@ -9,7 +9,6 @@ import { produce } from "immer";
 export const useGetRoomEventsQuery = (room: string) => {
   const queryClient = useQueryClient();
   const socket = useSocket((state) => state.socket);
-  const connectSocket = useSocket((state) => state.connectSocket);
 
   const query = useQuery({
     queryKey: ["events", room],
@@ -17,8 +16,6 @@ export const useGetRoomEventsQuery = (room: string) => {
   });
 
   useEffect(() => {
-    connectSocket();
-
     if (!socket) return;
     const handleNewEvent = (newEvent: IEvent) => {
       queryClient.setQueryData(
@@ -33,7 +30,7 @@ export const useGetRoomEventsQuery = (room: string) => {
     return () => {
       socket.off("new_event", handleNewEvent);
     };
-  }, [socket, queryClient, room, connectSocket]);
+  }, [socket, queryClient, room]);
 
   return query;
 };

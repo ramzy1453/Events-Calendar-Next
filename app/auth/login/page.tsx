@@ -17,6 +17,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { useLoginMutation } from "@/lib/services/user.service";
 
 // Types
 interface ILogin {
@@ -27,6 +28,7 @@ interface ILogin {
 export default function LoginPage() {
   const router = useRouter();
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const { mutateAsync: login } = useLoginMutation();
 
   // Direct login form
   const loginFormik = useFormik<ILogin>({
@@ -42,7 +44,7 @@ export default function LoginPage() {
       console.log(values);
       try {
         // Simulate login API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await login(values);
 
         toast.success("Connexion réussie");
         loginFormik.resetForm();

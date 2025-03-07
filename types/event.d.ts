@@ -13,3 +13,8 @@ export interface IEvent {
   description: string;
   user: IUser;
 }
+
+export interface IQueryEvent {
+  start_date?: string;
+  end_date?: string;
+}

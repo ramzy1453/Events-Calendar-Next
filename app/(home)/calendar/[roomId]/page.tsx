@@ -30,7 +30,7 @@ export default function RoomCalendar() {
 
   const { data: roomData, isLoading: isRoomLoading } = useRoomQuery(roomId);
   const { data: eventsData, isLoading: isEventsLoading } =
-    useGetRoomEventsQuery(roomId);
+    useGetRoomEventsQuery(roomId, {});
   const { data: membersData, isLoading: isMembersLoading } =
     useRoomMembersQuery(roomId);
 

@@ -1,18 +1,18 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import EventApi from "../api/event";
-import { ICreateEvent, IEvent } from "@/types/event";
+import { ICreateEvent, IEvent, IQueryEvent } from "@/types/event";
 import { useSocket } from "@/hooks/useSocket";
 import { useEffect } from "react";
 import { HTTPResponse } from "@/types/response";
 import { produce } from "immer";
 
-export const useGetRoomEventsQuery = (room: string) => {
+export const useGetRoomEventsQuery = (room: string, query: IQueryEvent) => {
   const queryClient = useQueryClient();
   const socket = useSocket((state) => state.socket);
 
-  const query = useQuery({
-    queryKey: ["events", room],
-    queryFn: () => EventApi.getRoomEvents(room),
+  const queryResponse = useQuery({
+    queryKey: ["events", room, query?.start_date, query?.end_date],
+    queryFn: () => EventApi.getRoomEvents(room, query),
   });
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export const useGetRoomEventsQuery = (room: string) => {
     };
   }, [socket, queryClient, room]);
 
-  return query;
+  return queryResponse;
 };
 
 export const useCreateEventMutation = (room: string) => {
